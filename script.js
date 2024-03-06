@@ -56,6 +56,9 @@ var fwd = 0;
 var bcwd = 0; 
 var lft = 0;
 var rght = 0;
+var mouseX = 0;
+var mouseY = 0;
+var dx = dy = dz = 0;
 
 function move(ev, vel){
 	if(ev.keyCode == 87){
@@ -74,16 +77,41 @@ function move(ev, vel){
 
 document.addEventListener("keydown", (event) => {this.move(event, 5)});
 document.addEventListener("keyup", (event) => {this.move(event, 0)});
+document.addEventListener("mousemove", (event)=>{
+	mouseX = event.movementX;
+	mouseY = event.movementY;
+	console.log(mouseX, mouseY);
+});
 
 
 
 function drawWorld(){
-	let dz = fwd - bcwd;
-	let dx = lft - rght;
+	dz = fwd - bcwd;
+	dx = lft - rght;
+
+	dry = -mouseX;
+
+	mouseX = mouseY = 0;
+
 	me.xPos += dx;
 	me.zPos += dz;
+
+	me.yRot += dry;
 	
-	world.style.transform = `translate3d(
+	world.style.transform = `
+		translateZ(600px) 
+		
+		rotateX(${
+			me.xRot
+		}deg)
+		rotateY(${
+			-me.yRot
+		}deg) 
+		rotateZ(${
+			me.zRot
+		}deg)
+
+		translate3d(
 		${
 			me.xPos
 		}px, 
@@ -93,15 +121,7 @@ function drawWorld(){
 		${
 			me.zPos
 		}px) 
-		rotateX(${
-			me.xRot
-		}deg)
-		rotateY(${
-			me.yRot
-		}deg) 
-		rotateZ(${
-			me.zRot
-		}deg)`;
+		`;
 }
 
 game = setInterval(drawWorld, 10);
