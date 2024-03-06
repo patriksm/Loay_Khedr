@@ -52,6 +52,8 @@ function mySelf(xPos, yPos, zPos, xRot, yRot, zRot){
 
 var me = new mySelf(0,0,0,0,0,0);
 
+var deg = Math.PI/180;
+
 var fwd = 0;
 var bcwd = 0; 
 var lft = 0;
@@ -80,14 +82,17 @@ document.addEventListener("keyup", (event) => {this.move(event, 0)});
 document.addEventListener("mousemove", (event)=>{
 	mouseX = event.movementX;
 	mouseY = event.movementY;
-	console.log(mouseX, mouseY);
 });
 
 
 
 function drawWorld(){
-	dz = fwd - bcwd;
-	dx = lft - rght;
+	//dx = lft - rght;
+	//dz = fwd - bcwd;
+	//dx = xx * COS - yy * SIN
+	dx = (rght - lft) * Math.cos(me.yRot*deg) - (fwd - bcwd) * Math.sin(me.yRot*deg);
+	dz = - (rght - lft) * Math.sin(me.yRot*deg) - (fwd - bcwd) * Math.cos(me.yRot*deg);
+
 
 	dry = -mouseX;
 
@@ -100,7 +105,7 @@ function drawWorld(){
 	
 	world.style.transform = `
 		translateZ(600px) 
-		
+
 		rotateX(${
 			me.xRot
 		}deg)
@@ -113,13 +118,13 @@ function drawWorld(){
 
 		translate3d(
 		${
-			me.xPos
+			-me.xPos
 		}px, 
 		${
-			me.yPos
+			-me.yPos
 		}px, 
 		${
-			me.zPos
+			-me.zPos
 		}px) 
 		`;
 }
